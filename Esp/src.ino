@@ -13,7 +13,7 @@ RTC_DS3231 rtc;
 // const char* password = "2021mcdl";  //Enter Password here
 
 const char* ssid     = "sistema_de_irrigacao";
-const char* password = "123456789";
+const char* password = "12345678";
 
 IPAddress local_ip(192,168,1,1);
 IPAddress gateway(192,168,1,1);
@@ -32,7 +32,7 @@ int quantidadeDeHorariosConfigurados = 0;
 bool error = false;
 String mensagemdeErro = "";
 
-#define NUM_RELES 6
+#define NUM_RELES 14
 struct Rele {
   int porta;
   bool esta_ligado;
@@ -221,12 +221,12 @@ String SendHTML(){
   buf += "		font-weight: 600;";
   buf += "	}";
   buf += "	.containerBotoesManual .button h1 {";
-  buf += "		font-size: 4rem;";
+  buf += "		font-size: 3rem;";
   buf += "		color: #ffffff;";
   buf += "	}";
   buf += "	.containerBotoesManual .button label {";
   buf += "		color: #ffffff;";
-  buf += "		font-size: 1.6rem;";
+  buf += "		font-size: 1.3rem;";
   buf += "	}";
   buf += "	#botaodesligado {";
   buf += "		background-color: #8AC880;";
@@ -376,7 +376,7 @@ String SendHTML(){
   buf += "                <div>";
   if(quantidadeDeHorariosConfigurados >= 1){
     buf += "                <div>";
-    buf += "                    <h1>O sistema esta configurado para ficar ligado nos seguintes horarios:</h1>";
+    buf += "                    <h1>configurações salvas:</h1>";
     buf += "                    <div class='container-de-horarios'>";
 
     for(int i = 0; i < quantidadeDeHorariosConfigurados; i = i + 1){
@@ -554,6 +554,9 @@ String SendHTMLConfigurarRelogio(){
   buf += "        background-color: #1E1E1E;";
   buf += "        font-size: 1.6rem;";
   buf += "    }";
+  buf += "  h1 {";
+  buf += "      font-size: 3rem;";
+  buf += "  }";
   buf += "    .wrapper {";
   buf += "        display: flex;";
   buf += "        align-items: center;";
@@ -568,22 +571,21 @@ String SendHTMLConfigurarRelogio(){
   buf += "        display: flex;";
   buf += "        align-items: center;";
   buf += "        flex-direction: column;";
-  buf += "        gap: 4rem;";
+  buf += "        gap: 2rem;";
   buf += "    }";
   buf += "    .timer-container {";
   buf += "        display: flex;";
   buf += "        flex-direction: column;";
-  buf += "        gap: 2.1rem;";
+  buf += "        gap: 0.5rem;";
   buf += "    }";
   buf += "    button {";
-  buf += "        width: 7rem;";
-  buf += "        height: 7rem;";
+  buf += "        width: 6rem;";
+  buf += "        height: 6rem;";
   buf += "        background: #8AC880;";
   buf += "        border: none;";
   buf += "        border-radius: 10px;";
-  buf += "        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);";
   buf += "        font-weight: 900;";
-  buf += "        font-size: 36px;";
+  buf += "        font-size: 32px;";
   buf += "        color: #ffffff;";
   buf += "        cursor: pointer;";
   buf += "        transition: 200ms;";
@@ -595,8 +597,8 @@ String SendHTMLConfigurarRelogio(){
   buf += "        display: flex;";
   buf += "        justify-content: center;";
   buf += "        align-items: center;";
-  buf += "        width: 7rem;";
-  buf += "        height: 7rem;";
+  buf += "        width: 6rem;";
+  buf += "        height: 6rem;";
   buf += "        background: #CDCDCD;";
   buf += "        box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);";
   buf += "        border-radius: 1rem;";
@@ -735,6 +737,9 @@ String SendHTMLConfigurarHorario(){
   buf += "    :root {";
   buf += "        font-size: 62.5%;";
   buf += "    }";
+  buf += "    h1 {";
+  buf += "        font-size: 3rem;";
+  buf += "    }";
   buf += "    body {";
   buf += "        width: 100vw;";
   buf += "        height: 100vh;";
@@ -756,7 +761,7 @@ String SendHTMLConfigurarHorario(){
   buf += "        display: flex;";
   buf += "        align-items: center;";
   buf += "        flex-direction: column;";
-  buf += "        gap: 4rem;";
+  buf += "        gap: 2rem;";
   buf += "    }";
   buf += "    button {";
   buf += "        width: 6rem;";
@@ -764,13 +769,13 @@ String SendHTMLConfigurarHorario(){
   buf += "        background: #8AC880;";
   buf += "        border: none;";
   buf += "        border-radius: 10px;";
-  buf += "        box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);";
   buf += "        font-weight: 900;";
-  buf += "        font-size: 36px;";
+  buf += "        font-size: 32px;";
   buf += "        color: #ffffff;";
   buf += "        cursor: pointer;";
   buf += "        transition: 200ms;";
   buf += "    }";
+
   buf += "    button:hover {";
   buf += "        transform: scale(1.05);";
   buf += "    }";
@@ -781,8 +786,8 @@ String SendHTMLConfigurarHorario(){
   buf += "        display: flex;";
   buf += "        justify-content: center;";
   buf += "        align-items: center;";
-  buf += "        width: 7rem;";
-  buf += "        height: 7rem;";
+  buf += "        width: 6rem;";
+  buf += "        height: 6rem;";
   buf += "        background: #CDCDCD;";
   buf += "        box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);";
   buf += "        border-radius: 1rem;";
@@ -837,7 +842,7 @@ String SendHTMLConfigurarHorario(){
   buf += "    .timer-container {";
   buf += "        display: flex;";
   buf += "        flex-direction: column;";
-  buf += "        gap: 2.1rem;";
+  buf += "        gap: 0.5rem;";
   buf += "    }";
   buf += "    @media (max-width: 952px) {";
   buf += "        .app {";
@@ -859,11 +864,11 @@ String SendHTMLConfigurarHorario(){
   buf += "        font-weight: bolder;";
   buf += "    }";
   buf += "    .porta h1 {";
-  buf += "        font-size: 4rem;";
+  buf += "        font-size: 3rem;";
   buf += "        color: #ffffff;";
   buf += "    }";
   buf += "    .porta p {";
-  buf += "        font-size: 2rem;";
+  buf += "        font-size: 1.5rem;";
   buf += "        color: #ffffff;";
   buf += "        ";
   buf += "    }";
@@ -1110,12 +1115,12 @@ void ligarDispositivo(int index){
   
   dispositivoEstaLigado = true;
   reles[index].esta_ligado = true;
-  digitalWrite(reles[index].porta, HIGH);     
+  digitalWrite(reles[index].porta, LOW);     
 }
 void desligarDispositivo(int index){
   dispositivoEstaLigado = false;
   reles[index].esta_ligado = false;
-  digitalWrite(reles[index].porta, LOW);
+  digitalWrite(reles[index].porta, HIGH);
 }
 
 bool verificarSeDeveEstarLigado(
@@ -1332,6 +1337,18 @@ void setup() {
   reles[3] = {19, false, 4, false, false};
   reles[4] = {23, false, 5, false, false};
   reles[5] = {15, false, 6, false, false};
+  reles[6] = {13, false, 7, false, false};
+  reles[7] = {14, false, 8, false, false};
+  reles[8] = {27, false, 9, false, false};
+  reles[9] = {26, false, 10, false, false};
+  reles[10] = {25, false, 11, false, false};
+  reles[11] = {33, false, 12, false, false};
+  reles[12] = {32, false, 13, false, false};
+  reles[13] = {1, false, 14, false, false};
+  
+
+
+
 
   for (int i = 0; i < NUM_RELES; i++) {
     pinMode(reles[i].porta, OUTPUT);
