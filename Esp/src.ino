@@ -4,8 +4,11 @@
 #include <SPI.h>
 #include <Wire.h>
 #include <RTClib.h>
-// #include <Wire.h>
+#include <Preferences.h>
 #define EEPROM_SIZE 64
+
+Preferences preferences;
+
 
 RTC_DS3231 rtc;
 
@@ -32,7 +35,7 @@ int quantidadeDeHorariosConfigurados = 0;
 bool error = false;
 String mensagemdeErro = "";
 
-#define NUM_RELES 14
+#define NUM_RELES 13
 struct Rele {
   int porta;
   bool esta_ligado;
@@ -65,7 +68,7 @@ void escreverValorInteiroNaEEPROM(int endereco1, int endereco2, int valor){
 
 int lerValorInteiroDaEEPROM(int endereco1, int endereco2){
 
-  EEPROM.begin(512);    
+  EEPROM.begin(512);
 
   int primeiroCaractereDoValor = EEPROM.read(endereco1);
   int segundoCaractereDoValor = EEPROM.read(endereco2);
@@ -385,8 +388,8 @@ String SendHTML(){
       int minutoLiga = atoi(horariosParaLigarEDesligar.substring(i*12+2, i*12+4).c_str());
       int horaDesliga = atoi(horariosParaLigarEDesligar.substring(i*12+4, i*12+6).c_str());
       int minutoDesliga = atoi(horariosParaLigarEDesligar.substring(i*12+6, i*12+8).c_str());
-      int indexRele = atoi(horariosParaLigarEDesligar.substring(i*12+9, i*12+10).c_str());
-      int horarioAtivo = atoi(horariosParaLigarEDesligar.substring(i*12+11, i*12+12).c_str());
+      int indexRele = atoi(horariosParaLigarEDesligar.substring(i*12+8, i*12+10).c_str());
+      int horarioAtivo = atoi(horariosParaLigarEDesligar.substring(i*12+10, i*12+12).c_str());
 
 			buf += "		<div class='horario'>";
       buf += "    <input onchange='ativaDesativaHorario(\"";
@@ -1196,6 +1199,17 @@ void handleAdicionarHorarioLigaEDesliga(){
   String minutoDesliga1 = server.arg(3);
   String indexRele = server.arg(4);
 
+  Serial.println(horariosParaLigarEDesligar.length());
+
+  if(horariosParaLigarEDesligar.length() > 228){
+    error = true;
+    mensagemdeErro = "Limite de horarios alcançado";
+    server.sendHeader("Location", "/configurar-horario", true); 
+    server.send(302, "text/plain", "");
+    return;
+    
+  }
+
   int horaLigaInt = atoi(horaLiga1.c_str());
   int minutoLigaInt = atoi(minutoLiga1.c_str()); 
   int horaDesligaInt = atoi(horaDesliga1.c_str()); 
@@ -1328,7 +1342,7 @@ void handleAlterarEstadoHorario(){
 }
 
 void setup() {
-  Serial.begin(115200);
+  Serial.begin(9600);
 
            //Porta-estaligado-identificador-ligadoManualmente-DesligadoManualmente
   reles[0] = {5, false, 1, false, false};
@@ -1344,11 +1358,8 @@ void setup() {
   reles[10] = {25, false, 11, false, false};
   reles[11] = {33, false, 12, false, false};
   reles[12] = {32, false, 13, false, false};
-  reles[13] = {1, false, 14, false, false};
+  // reles[13] = {1, false, 14, false, false};
   
-
-
-
 
   for (int i = 0; i < NUM_RELES; i++) {
     pinMode(reles[i].porta, OUTPUT);
@@ -1391,7 +1402,7 @@ void setup() {
   Serial.println(WiFi.localIP());
   Serial.println();
 
-  EEPROM.begin(EEPROM_SIZE);
+  EEPROM.begin(512);
 
   lerHorariosDaMemoria();
 
@@ -1429,7 +1440,7 @@ void loop(){
 
           if(deveEstarLigado && !reles[indexRele].esta_ligado){
             ligarDispositivo(indexRele);
-          } else if(!deveEstarLigado && reles[indexRele].esta_ligado){
+          } else if(!deveEstarLigado && reles[indexRele].esta_ligado && minutoDoDiaParaDesligarSistema == minutoDoDiaAtual){
             desligarDispositivo(indexRele);
           }
         }
