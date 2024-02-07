@@ -5,7 +5,7 @@
 #include <Wire.h>
 #include <RTClib.h>
 #include <Preferences.h>
-#define EEPROM_SIZE 64
+#define EEPROM_SIZE 512
 
 Preferences preferences;
 
@@ -50,7 +50,7 @@ uint8_t addr_inicial = 8;
 
 void escreverValorInteiroNaEEPROM(int endereco1, int endereco2, int valor){
 
-  EEPROM.begin(512);    
+  EEPROM.begin(EEPROM_SIZE);    
 
   int primeiroCaractereDoValor = valor/10;
   int segundoCaractereDoValor = (valor%10);
@@ -68,7 +68,7 @@ void escreverValorInteiroNaEEPROM(int endereco1, int endereco2, int valor){
 
 int lerValorInteiroDaEEPROM(int endereco1, int endereco2){
 
-  EEPROM.begin(512);
+  EEPROM.begin(EEPROM_SIZE);
 
   int primeiroCaractereDoValor = EEPROM.read(endereco1);
   int segundoCaractereDoValor = EEPROM.read(endereco2);
@@ -1103,10 +1103,10 @@ void initWiFi() {
 }
 void LimparEEPROM() {
 
-  EEPROM.begin(512);  
+  EEPROM.begin(EEPROM_SIZE);  
 
   Serial.println("Limpando EEPROM!");
-  for (int i = 0; i <= 255; i++) {
+  for (int i = 0; i <= EEPROM_SIZE; i++) {
     EEPROM.write(i, 0);
   }
   Serial.println("EEPROM apagada!");
@@ -1201,7 +1201,7 @@ void handleAdicionarHorarioLigaEDesliga(){
 
   Serial.println(horariosParaLigarEDesligar.length());
 
-  if(horariosParaLigarEDesligar.length() > 228){
+  if(horariosParaLigarEDesligar.length() >= 504){
     error = true;
     mensagemdeErro = "Limite de horarios alcançado";
     server.sendHeader("Location", "/configurar-horario", true); 
@@ -1305,7 +1305,7 @@ void handleExcluirHorario(){
 
     int valorInt = atoi(horariosParaLigarEDesligar.substring(i,i+1).c_str());
 
-    EEPROM.begin(512);
+    EEPROM.begin(EEPROM_SIZE);
     EEPROM.write(i, valorInt);
     EEPROM.end();
 
@@ -1330,7 +1330,7 @@ void handleAlterarEstadoHorario(){
 
     int valorInt = atoi(horariosParaLigarEDesligar.substring(i,i+1).c_str());
 
-    EEPROM.begin(512);
+    EEPROM.begin(EEPROM_SIZE);
     EEPROM.write(i, valorInt);
     EEPROM.end();
 
@@ -1402,7 +1402,7 @@ void setup() {
   Serial.println(WiFi.localIP());
   Serial.println();
 
-  EEPROM.begin(512);
+  EEPROM.begin(EEPROM_SIZE);
 
   lerHorariosDaMemoria();
 
